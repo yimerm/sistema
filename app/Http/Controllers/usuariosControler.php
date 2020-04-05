@@ -49,6 +49,7 @@ class usuariosControler extends Controller
         $user->celular = $request->input('celular');
         $user->direcion = $request->input('direcion');
         $user->monto_deuda = $request->input('monto_deuda');
+        $user->slug = $request->input('slug');
         $user->imagenusu = $nombreimg;
         $user->save();
         return 'save';
@@ -60,10 +61,8 @@ class usuariosControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Usuarios $Usuarios)
-    {  
-        //$usuarios = usuarios::find($id); 
-        return view('user.editar', compact('Usuarios'));
+    public function show($id)
+    {   
     }
 
     /**
@@ -72,9 +71,9 @@ class usuariosControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Usuarios $user)
     {   
-
+        return view('user.editar', compact('user'));
     }
 
     /**
@@ -84,9 +83,10 @@ class usuariosControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Usuarios $user)
     {
-        //
+        
+        return $request;
     }
 
     /**

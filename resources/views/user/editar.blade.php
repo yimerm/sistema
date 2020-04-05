@@ -1,10 +1,16 @@
-@extends('layouts.app')
-@section('title','Editar')
+ @extends('layouts.app')
+@section('title','inicio')
 
 @section('content')
  
-	 hola
-	 <h3>{{$Usuarios->nombre}}</h3> 
-	  
-<a href="" class="btn btn-primary">Editar 1</a>
+	<form class="form-group" method="POST" action="/user/{{$user->slug}}" enctype="multipart/form-data">
+		@method('PUT')
+		@csrf
+		@include('user.from_usuario')
+		<button type="submit" class="btn btn-primary">editar</button>
+	</form>
+
 @endsection
+  
+	  
+ 

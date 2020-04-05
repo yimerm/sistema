@@ -26,7 +26,7 @@
 				<td>{{$tablaUsuarios->celular}}</td>
 				<td>{{$tablaUsuarios->direcion}}</td>
 				<td>{{$tablaUsuarios->monto_deuda}}</td>
-				<td><a href="/user/{{$tablaUsuarios->id}}" class="btn btn-primary">Editar</a><a href="#" class="btn btn-danger">borar</a></td>
+				<td><a href="/user/{{$tablaUsuarios->slug}}/edit" class="btn btn-primary">Editar</a><a href="#" class="btn btn-danger">borar</a></td>
 			</tr>		
 		@endforeach
 	  </tbody>
