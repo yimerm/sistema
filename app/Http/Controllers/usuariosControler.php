@@ -85,8 +85,16 @@ class usuariosControler extends Controller
      */
     public function update(Request $request, Usuarios $user)
     {
-        
-        return $request;
+        $user->fill($request->except('imagenusu'));
+        if ($request->hasfile('imagenusu')) {
+
+            $imagen = $request->file('imagenusu');
+            $nombreimg = time().$imagen->getClientOriginalName();
+            $user->imagenusu = $nombreimg;
+            $imagen->move(public_path().'/imagenes/',$nombreimg);
+        }
+        $user->save();
+        return 'updated';
     }
 
     /**

@@ -24,5 +24,5 @@
 	</div> 
 	<div class="form-group">
 		<label for="">imagen</label>
-		<input type="file" @isset($user->imagenusu) value="{{ $user->imagenusu }}" @endisset name="imagenusu" >
+		<input type="file" name="imagenusu" class="form-control">
 	</div>
