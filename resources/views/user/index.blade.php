@@ -30,7 +30,8 @@
 
 					<form method="POST" action="/user/{{$tablaUsuarios->slug}}">
 						@method('DELETE')
-						<button type="submit" class="btn btn-danger">Borrar</button>
+						@csrf
+						<input type="submit" class="btn btn-danger" value="borrar">
 					</form>
 				</td>
 					
