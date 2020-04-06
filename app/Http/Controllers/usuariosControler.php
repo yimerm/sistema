@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Usuarios; 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreusuariosRequest;
 
 class usuariosControler extends Controller
 {
@@ -33,8 +34,8 @@ class usuariosControler extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(StoreusuariosRequest $request)
+    { 
         if ($request->hasfile('imagenusu')) {
 
             $imagen = $request->file('imagenusu');
@@ -103,8 +104,8 @@ class usuariosControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Usuarios $user)
     {
-        //
+        return $user;
     }
 }

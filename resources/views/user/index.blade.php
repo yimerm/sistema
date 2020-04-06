@@ -26,7 +26,15 @@
 				<td>{{$tablaUsuarios->celular}}</td>
 				<td>{{$tablaUsuarios->direcion}}</td>
 				<td>{{$tablaUsuarios->monto_deuda}}</td>
-				<td><a href="/user/{{$tablaUsuarios->slug}}/edit" class="btn btn-primary">Editar</a><a href="#" class="btn btn-danger">borar</a></td>
+				<td><a href="/user/{{$tablaUsuarios->slug}}/edit" class="btn btn-primary">Editar</a>
+
+					<form method="POST" action="/user/{{$tablaUsuarios->slug}}">
+						@method('DELETE')
+						<button type="submit" class="btn btn-danger">Borrar</button>
+					</form>
+				</td>
+					
+					
 			</tr>		
 		@endforeach
 	  </tbody>
