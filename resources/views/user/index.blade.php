@@ -52,12 +52,27 @@
 			</table>
 			{{ $tablaUsu->links() }}
 
+<<<<<<< HEAD
 		</div>
 		<div class="col-3">
 			@include('datcomunes.success')
 			@include('datcomunes.error')
 		</div>
 	</div>
+=======
+					<form method="POST" action="/user/{{$tablaUsuarios->slug}}">
+						@method('DELETE')
+						@csrf
+						<input type="submit" class="btn btn-danger" value="borrar">
+					</form>
+				</td>
+					
+					
+			</tr>		
+		@endforeach
+	  </tbody>
+	</table>
+>>>>>>> d4512e082b6cea62635af48641b0072dcd893ada
 </div>
 
 
