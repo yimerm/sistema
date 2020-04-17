@@ -1,17 +1,17 @@
  @extends('layouts.app')
-@section('title','inicio')
+@section('title','Editar')
 @section('mis_rutas')
-<li class="breadcrumb-item active" aria-current="page"><a href="{{route('user.index')}}">Usuarios</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="{{route('categoria.index')}}">Categoria</a></li>
 <li class="breadcrumb-item active" aria-current="page">Editar</li>
 @endsection
 @section('content')
 	<div class="container">
 		<div class="row"  style=" margin-top: 50px;"> 
 			<div class="col-8">
-				<form class="form-group" method="POST" action="/user/{{$user->slug}}" enctype="multipart/form-data" autocomplete="off">
+				<form class="form-group" method="POST" action="/categoria/{{$categorias->slug_categoria}}" enctype="multipart/form-data" autocomplete="off">
 					@method('PUT')
 					@csrf
-					@include('user.from_usuario')
+					@include('categoria.formcategoria')
 					<button type="submit" class="btn btn-primary">Editar</button>
 				</form>
 			</div>
@@ -24,6 +24,3 @@
 	
 
 @endsection
-  
-	  
- 

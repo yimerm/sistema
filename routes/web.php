@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts/app');
 });
 
 Route::resource('user','usuariosControler');
+Route::resource('clientes','clienteControler');
+Route::resource('productos','productosControler');
+Route::resource('categoria','categoriaControler');
+
+  

@@ -14,7 +14,7 @@ class usuariosControler extends Controller
      */
     public function index()
     { 
-        $tablaUsu = Usuarios::all();
+        $tablaUsu = Usuarios::paginate(3);
         return view('user.index',compact('tablaUsu'));
     }
 
@@ -50,10 +50,10 @@ class usuariosControler extends Controller
         $user->celular = $request->input('celular');
         $user->direcion = $request->input('direcion');
         $user->monto_deuda = $request->input('monto_deuda');
-        $user->slug = $request->input('slug');
+        $user->slug = $request->input('nombre').time();
         $user->imagenusu = $nombreimg;
         $user->save();
-        return 'save';
+        return redirect()->route('user.create', [$user])->with('status','Usuario creado'); 
     }
 
     /**
@@ -95,7 +95,7 @@ class usuariosControler extends Controller
             $imagen->move(public_path().'/imagenes/',$nombreimg);
         }
         $user->save();
-        return 'updated';
+        return redirect()->route('user.edit', [$user])->with('status','Usuario actualizado'); 
     }
 
     /**
@@ -106,6 +106,10 @@ class usuariosControler extends Controller
      */
     public function destroy(Usuarios $user)
     {
-        return $user;
+        $file_path = public_path().'/imagenes/'.$user->imagenusu;
+        \File::delete($file_path);
+
+        $user->delete();
+        return redirect()->route('user.index', [$user])->with('status','Usuario borrado');
     }
 }
