@@ -58,9 +58,10 @@ class categoriaControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(caregorias $categoria)
+    public function edit(caregorias $categorium)
     {
-        $categoria = caregorias::find($id); 
+        //$categoria = caregorias::find($id); 
+        $categoria = $categorium;
         return view('categoria.editarcategoria', compact('categoria'));
     }
 
@@ -71,9 +72,11 @@ class categoriaControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,caregorias $categorium)
     {
-        //
+        $categorium->fill($request->all());
+        $categorium->save();
+        return redirect()->route('categoria.edit', [$categorium])->with('status','Categoria actualizado');
     }
 
     /**
@@ -82,9 +85,9 @@ class categoriaControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(caregorias $categoria)
+    public function destroy(caregorias $categorium)
     {
-         $categoria->delete();
-        return redirect()->route('categoria.index', [$categoria])->with('status','Categoria borrado');
+         $categorium->delete();
+        return redirect()->route('categoria.index', [$categorium])->with('status','Categoria borrado');
     }
 }

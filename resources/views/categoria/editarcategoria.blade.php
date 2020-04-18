@@ -8,7 +8,7 @@
 	<div class="container">
 		<div class="row"  style=" margin-top: 50px;"> 
 			<div class="col-8">
-				<form class="form-group" method="POST" action="/categoria/{{$categorias->slug_categoria}}" enctype="multipart/form-data" autocomplete="off">
+				<form class="form-group" method="POST" action="/categoria/{{$categoria->slug_categoria}}" enctype="multipart/form-data" autocomplete="off">
 					@method('PUT')
 					@csrf
 					@include('categoria.formcategoria')
