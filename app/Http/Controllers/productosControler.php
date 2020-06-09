@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\caregorias; 
 use App\productos;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\storeproductosrequest;
 class productosControler extends Controller
@@ -12,8 +14,8 @@ class productosControler extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $tablaprod = productos::paginate(3);
+    { 
+        $tablaprod = productos::with('categorianom')->paginate(3);
         return view('productos.index',compact('tablaprod'));
     }
 
@@ -24,7 +26,8 @@ class productosControler extends Controller
      */
     public function create()
     {
-        return view('productos.crearProducto');
+        $categorias = caregorias::all();
+        return view('productos.crearProducto',compact('categorias'));
     }
 
     /**
@@ -36,6 +39,7 @@ class productosControler extends Controller
     public function store(storeproductosrequest $request)
     {
          $producto = new productos();
+          $imagenprod = 'productos.png';
         if ($request->hasfile('imagenprod')) {
 
             $imagen = $request->file('imagenprod');
@@ -50,12 +54,13 @@ class productosControler extends Controller
         $producto->nombre = $request->input('nombre');
         $producto->precio_ini = $request->input('precio_ini');
         $producto->Porcentaje = $request->input('Porcentaje');
-        $producto->precio_final = $request->input('precio_final');
+        $producto->precio_final = $request->input('precio_ini')*$request->input('Porcentaje')/100+$request->input('precio_ini');
         $producto->cantidades = $request->input('cantidades');
         $producto->total_cantidades = $request->input('cantidades');
         $producto->salidas_cantidades = '0'; 
         $producto->imagenprod = $imagenprod;
-        $producto->slug_pro = $request->input('codigo').$request->input('nombre');
+
+        $producto->slug_pro = Str::of($request->input('nombre'))->slug('-');
         $producto->save();
         return redirect()->route('productos.create', [$producto])->with('status','Usuario creado');
     }
@@ -79,7 +84,8 @@ class productosControler extends Controller
      */
     public function edit(productos $producto)
     {
-        return view('productos.editarproduct', compact('producto'));
+        $categorias = caregorias::all();
+        return view('productos.editarproduct', compact('producto','categorias'));
     }
 
     /**
@@ -113,10 +119,22 @@ class productosControler extends Controller
      */
     public function destroy(productos $producto)
     {
-        $file_path = public_path().'/imagenes/'.$producto->imagenprod;
-        \File::delete($file_path);
+        if ($producto->imagenprod == 'productos.png' ) 
+        {
+            
+            $producto->delete();
+            return redirect()->route('productos.index', [$producto])->with('status','Usuario borrado');
+        }
+        else
+        {
+            $file_path = public_path().'/imagenes/'.$producto->imagenprod;
+            \File::delete($file_path);
 
-        $producto->delete();
-        return redirect()->route('productos.index', [$producto])->with('status','Usuario borrado');
+            $producto->delete();
+            return redirect()->route('productos.index', [$producto])->with('status','Usuario borrado');
+        
+
+        }
+       
     }
 }

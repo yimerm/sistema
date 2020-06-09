@@ -14,9 +14,12 @@ class CreateProductosTable extends Migration
     public function up()
     {
         Schema::create('productos', function (Blueprint $table) {
-            $table->id();
+
+            $table->increments('id');
+
+            $table->integer('categoria')->unsigned(); 
+
             $table->string('codigo');
-            $table->string('categoria');
             $table->string('nombre');
             $table->string('precio_ini');
             $table->string('Porcentaje');
@@ -25,7 +28,17 @@ class CreateProductosTable extends Migration
             $table->string('total_cantidades');
             $table->string('salidas_cantidades');
             $table->timestamps();
+
+            
         });
+
+        Schema::table('productos', function(Blueprint $table)
+        {
+            $table->foreign('categoria')->references('id')->on('caregorias')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+        });
+
     }
 
     /**

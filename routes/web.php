@@ -21,5 +21,7 @@ Route::resource('user','usuariosControler');
 Route::resource('clientes','clienteControler');
 Route::resource('productos','productosControler');
 Route::resource('categoria','categoriaControler');
+Route::resource('proveedor','proveedorControler');
+Route::resource('entradafactura','factEntradaControler');
 
   

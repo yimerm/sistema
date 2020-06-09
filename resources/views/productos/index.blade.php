@@ -38,7 +38,7 @@
 							<td><img style="height: 50px; width: 50px" class="card-img-top" src="imagenes/{{$tablaproduct->imagenprod}}"></td>
 							<td>{{$tablaproduct->codigo}}</td>
 							<td>{{$tablaproduct->nombre}}</td>
-							<td>{{$tablaproduct->categoria}}</td>
+							<td>{{$tablaproduct->categorianom->nombre}}</td>
 							<td>{{$tablaproduct->precio_ini}}</td>
 							<td>{{$tablaproduct->Porcentaje}} %</td>
 							<td>{{$tablaproduct->precio_final}}</td>

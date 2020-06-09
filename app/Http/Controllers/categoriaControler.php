@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\caregorias; 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class categoriaControler extends Controller
@@ -24,6 +25,7 @@ class categoriaControler extends Controller
      */
     public function create()
     {
+        
         return view('categoria.crearcategoria');
     }
 
@@ -37,7 +39,7 @@ class categoriaControler extends Controller
     {
          $categoria = new caregorias();
          $categoria->nombre = $request->input('nombre');
-         $categoria->slug_categoria = $request->input('nombre').time();
+         $categoria->slug_categoria = Str::of($request->input('nombre'))->slug('-');
          $categoria->save();
          return redirect()->route('categoria.create', [$categoria])->with('status','Categoria creado');
     }

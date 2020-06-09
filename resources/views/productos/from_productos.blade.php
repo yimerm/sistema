@@ -3,7 +3,14 @@
 			<div class="input-group-prepend">
 				<div class="input-group-text">Categoria</div>
 			</div>
-			<input type="text" @isset($producto->categoria) value="{{ $producto->categoria }}" @endisset name="categoria" class="form-control" placeholder="">
+			<select name="categoria" id="categoria" class="form-control" >
+				<option value="">-Escoja una categoria</option>
+				@foreach($categorias as $categoria)
+				<option value="{{ $categoria['id']}}">{{ $categoria['nombre']}}</option>
+						
+				@endforeach
+
+			</select>
 		</div>
 	</div> 
 
@@ -66,6 +73,6 @@
 			<div class="input-group-prepend">
 				<div class="input-group-text">Imagen</div>
 			</div>
-			<input type="file" name="imagenprod" class="form-control">
+			<input type="file" name="imagenprod" class="form-control" >
 		</div>
-	</div>
+	</div>  

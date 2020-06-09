@@ -21,9 +21,13 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{route('clientes.index')}}">Clientes</a> 
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{route('categoria.index')}}">Categoria</a> 
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{route('productos.index')}}">Productos</a> 
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{route('categoria.index')}}">Categoria</a> 
+          <a class="dropdown-item" href="{{route('proveedor.index')}}">Proveedor</a> 
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{route('entradafactura.index')}}">Inventario</a> 
           <div class="dropdown-divider"></div>
         </div>
       </li>

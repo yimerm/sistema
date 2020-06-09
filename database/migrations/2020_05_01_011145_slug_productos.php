@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ImagenProducto extends Migration
+class SlugProductos extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class ImagenProducto extends Migration
     public function up()
     {
         Schema::table('productos', function (Blueprint $table) {
-            $table->string('imagenprod');
+             $table->string('slug_pro')->unique();
         });
     }
 
@@ -26,7 +26,7 @@ class ImagenProducto extends Migration
     public function down()
     {
         Schema::table('productos', function (Blueprint $table) {
-            //
+             $table->dropColumn('slug_pro');
         });
     }
 }
