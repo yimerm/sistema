@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\proveedor;
 
 class entradafactura extends Model
 {
@@ -12,4 +13,15 @@ class entradafactura extends Model
 	{
 		return $this->belongsTo('App\proveedor','nombre');
 	} 
+
+	public static function codprove()
+    {
+    	$proveedores = proveedor::all();
+        $select = [];
+        foreach($proveedores as $proveedores)
+        {
+            $select[$proveedores->id] = $proveedores->nombre;
+        }
+        return $select;
+    }
 }

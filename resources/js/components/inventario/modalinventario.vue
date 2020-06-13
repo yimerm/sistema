@@ -16,9 +16,13 @@
 						</div>
 
 						<div class="form-group">
-							<label for="proveedor">Proveedor</label>
-							<input type="text" class="form-control" id="proveedor" aria-describedby="nombreHelp" placeholder="Producto" v-model="proveedor">
+							<label for="nombre">Tipo de proveedor</label>
+							<select v-model="proveedor" class="form-control" id="nombre" >
+								<option disabled value="">Seleccione un productosss</option>
+								<option v-for="(nombre,key) in codprove" :value="key">{{ nombre }}</option>
+							</select>  
 						</div>
+
 
 						<div class="form-group" align="center">
 							<button type="submit" class="btn btn-success">Guardar</button> 
@@ -39,9 +43,13 @@ export default
 		data(){
 			return{
 				codigo:'',
-				proveedor: null
+				proveedor: null,
+				codprove:{}
 			}
 		},
+		mounted() {
+            axios.get('http://venta.test/entradafactura').then(response => {this.codprove =  response.data.codprove });
+        },
 		methods: {
 			guardarinventario : function()
 			{

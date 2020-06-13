@@ -15,11 +15,16 @@ class factEntradaControler extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()){
+
             $proveedors = entradafactura::all();
-            return response()->json($proveedors,200);
 
             //$proveedor = entradafactura::all();
+
+            $codprove = entradafactura::codprove();
+            $data = ["codprove"=> $codprove,"proveedors"=> $proveedors];
+            return response()->json($data,200);
         }
+
 
         return view('entradafactura.index'); 
     }

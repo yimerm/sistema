@@ -3,26 +3,6 @@
 	<div>
 
 
-
-	<div class="input-group">
-		<div class="input-group-prepend">
-			<div class="input-group-text">cod. factura</div>
-		</div>
-		<input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
-	</div>
-		<div class="input-group">
-		<div class="input-group-prepend">
-			<div class="input-group-text">nombre proveedor</div>
-		</div>
-		<input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
-	</div>
-		<div class="input-group">
-		<div class="input-group-prepend">
-			<div class="input-group-text">total</div>
-		</div>
-		<input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
-	</div>
-
 		<table class="table  table-bordered table-sm">
 			<thead>
 				<tr align="center">
@@ -41,7 +21,7 @@
 						<td align="center">total:{{ proveedor.total}}</td>
 						<td align="center">
 							<button type="button" @click="editProductos(producto)" class="btn btn-primary btn-sm" data-toggle="modal" data-backdrop="static" data-target="#crearProducto">
-							  Editar
+							  Inventariar
 							</button>
 						</td>
 						<td align="center">

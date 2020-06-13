@@ -1947,26 +1947,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2036,13 +2016,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       codigo: '',
-      proveedor: null
+      proveedor: null,
+      codprove: {}
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('http://venta.test/entradafactura').then(function (response) {
+      _this.codprove = response.data.codprove;
+    });
   },
   methods: {
     guardarinventario: function guardarinventario() {
@@ -20307,14 +20299,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
-    _vm._m(2),
-    _vm._v(" "),
     _c("table", { staticClass: "table  table-bordered table-sm" }, [
-      _vm._m(3),
+      _vm._m(0),
       _vm._v(" "),
       _c(
         "tbody",
@@ -20347,7 +20333,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n\t\t\t\t\t\t  Editar\n\t\t\t\t\t\t")]
+                [_vm._v("\n\t\t\t\t\t\t  Inventariar\n\t\t\t\t\t\t")]
               )
             ]),
             _vm._v(" "),
@@ -20379,65 +20365,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group" }, [
-      _c("div", { staticClass: "input-group-prepend" }, [
-        _c("div", { staticClass: "input-group-text" }, [_vm._v("cod. factura")])
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "inlineFormInputGroupUsername",
-          placeholder: "Username"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group" }, [
-      _c("div", { staticClass: "input-group-prepend" }, [
-        _c("div", { staticClass: "input-group-text" }, [
-          _vm._v("nombre proveedor")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "inlineFormInputGroupUsername",
-          placeholder: "Username"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group" }, [
-      _c("div", { staticClass: "input-group-prepend" }, [
-        _c("div", { staticClass: "input-group-text" }, [_vm._v("total")])
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          id: "inlineFormInputGroupUsername",
-          placeholder: "Username"
-        }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -20574,36 +20501,52 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "proveedor" } }, [
-                    _vm._v("Proveedor")
+                  _c("label", { attrs: { for: "nombre" } }, [
+                    _vm._v("Tipo de proveedor")
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.proveedor,
-                        expression: "proveedor"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      id: "proveedor",
-                      "aria-describedby": "nombreHelp",
-                      placeholder: "Producto"
-                    },
-                    domProps: { value: _vm.proveedor },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.proveedor,
+                          expression: "proveedor"
                         }
-                        _vm.proveedor = $event.target.value
+                      ],
+                      staticClass: "form-control",
+                      attrs: { id: "nombre" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.proveedor = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        }
                       }
-                    }
-                  })
+                    },
+                    [
+                      _c("option", { attrs: { disabled: "", value: "" } }, [
+                        _vm._v("Seleccione un productosss")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.codprove, function(nombre, key) {
+                        return _c("option", { domProps: { value: key } }, [
+                          _vm._v(_vm._s(nombre))
+                        ])
+                      })
+                    ],
+                    2
+                  )
                 ]),
                 _vm._v(" "),
                 _c(
