@@ -13,9 +13,18 @@ class productosControler extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     { 
-        $tablaprod = productos::with('categorianom')->paginate(3);
+         if ($request->ajax()){
+
+            $tablaprod = productos::with('categoria')->get(); 
+            $codcategoria = productos::codcategoria();  
+
+           
+            $data = ["tablaprod"=> $tablaprod,"codcategoria"=> $codcategoria]; 
+            return response()->json($data,200);
+            
+        } 
         return view('productos.index',compact('tablaprod'));
     }
 
@@ -25,9 +34,7 @@ class productosControler extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $categorias = caregorias::all();
-        return view('productos.crearProducto',compact('categorias'));
+    { 
     }
 
     /**
@@ -36,33 +43,29 @@ class productosControler extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(storeproductosrequest $request)
+    public function store(Request $request)
     {
-         $producto = new productos();
-          $imagenprod = 'productos.png';
-        if ($request->hasfile('imagenprod')) {
-
-            $imagen = $request->file('imagenprod');
-            $imagenprod = time().$imagen->getClientOriginalName();
-            $imagen->move(public_path().'/imagenes/',$imagenprod);
-           
+                if ($request->ajax()) 
+        { 
+            $producto = new productos();
+            $producto->codigo = $request->input('codigo');
+            $producto->categoria = $request->input('categoria');
+            $producto->nombre = $request->input('nombre');
+            $producto->precio_ini = $request->input('precio_ini');
+            $producto->Porcentaje = $request->input('Porcentaje');
+            $producto->precio_final = $request->input('precio_ini')*$request->input('Porcentaje')/100+$request->input('precio_ini');
+            $producto->cantidades = $request->input('cantidades');
+            $producto->total_cantidades = $request->input('cantidades');
+            $producto->salidas_cantidades = '0'; 
+            $producto->imagenprod = $request->input('imagenprod');
+            $producto->slug_pro = Str::of($request->input('codigo'));
+            $producto->save(); 
+            return response()->json([
+                "message"=>"Producto creado",
+                "producto"=>$producto
+            ],200);
         }
 
-       
-        $producto->codigo = $request->input('codigo');
-        $producto->categoria = $request->input('categoria');
-        $producto->nombre = $request->input('nombre');
-        $producto->precio_ini = $request->input('precio_ini');
-        $producto->Porcentaje = $request->input('Porcentaje');
-        $producto->precio_final = $request->input('precio_ini')*$request->input('Porcentaje')/100+$request->input('precio_ini');
-        $producto->cantidades = $request->input('cantidades');
-        $producto->total_cantidades = $request->input('cantidades');
-        $producto->salidas_cantidades = '0'; 
-        $producto->imagenprod = $imagenprod;
-
-        $producto->slug_pro = Str::of($request->input('nombre'))->slug('-');
-        $producto->save();
-        return redirect()->route('productos.create', [$producto])->with('status','Usuario creado');
     }
 
     /**
@@ -83,9 +86,7 @@ class productosControler extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(productos $producto)
-    {
-        $categorias = caregorias::all();
-        return view('productos.editarproduct', compact('producto','categorias'));
+    { 
     }
 
     /**
@@ -95,20 +96,34 @@ class productosControler extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, productos $producto)
+    public function update(storeproductosrequest $request, productos $producto)
     {
-        
-        $producto->fill($request->except('imagenprod'));
-        if ($request->hasfile('imagenprod')) {
+        if ($request->ajax()) 
+        {
+            $comparar = Str::of($request->input('nombre'))->slug_pro('-');
+            if ($comparar == $producto->slug_pro || !productos::where('slug_pro', $comparar)->exists()) 
+            {
+                $producto->slug_pro = $comparar;
 
-            $imagen = $request->file('imagenprod');
-            $imagenprod = time().$imagen->getClientOriginalName();
-            $producto->imagenprod = $imagenprod;
-            $imagen->move(public_path().'/imagenes/',$imagenprod);
+                $producto->codigo = $request->input('codigo');
+                $producto->categoria = $request->input('categoria');
+                $producto->nombre = $request->input('nombre');
+                $producto->precio_ini = $request->input('precio_ini');
+                $producto->Porcentaje = $request->input('Porcentaje');
+                $producto->precio_final = $request->input('precio_final');
+                $producto->cantidades = $request->input('cantidades');
+                $producto->imagenprod = $request->input('imagenprod');
+
+                $producto->save();
+                $productos = productos::with('categoria')->where('productos.slug_pro', $producto->slug_pro)->first();
+                return response()->json(["message"=>"productos editado","slug_pro"=>$producto->slug_pro,"productos"=>$productos],200);
+            }
+            else
+            {
+                $validateData = $request->validate(['nombre'=> 'unique:productos']);
+            }
         }
-        $producto->slug_pro = $request->input('codigo').$request->input('nombre');
-        $producto->save();
-        return redirect()->route('productos.edit', [$producto])->with('status','Usuario actualizado');    
+  
     }
 
     /**

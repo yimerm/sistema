@@ -11,7 +11,7 @@ class entradafactura extends Model
 
 	public function proveedor()
 	{
-		return $this->belongsTo('App\proveedor','nombre');
+		return $this->belongsTo('App\proveedor','proveedor');
 	} 
 
 	public static function codprove()
@@ -24,4 +24,5 @@ class entradafactura extends Model
         }
         return $select;
     }
+  
 }

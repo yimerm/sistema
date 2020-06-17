@@ -13,9 +13,18 @@ class productos extends Model
 		return 'slug_pro';
 	} 
 
-		    public function categorianom()
+		    public function categoria()
 		{
 			return $this->belongsTo('App\caregorias','categoria');
 		} 
-
+	public static function codcategoria()
+    {
+    	$categoria = caregorias::all();
+        $select = [];
+        foreach($categoria as $categoria)
+        {
+            $select[$categoria->id] = $categoria->nombre;
+        }
+        return $select;
+    }
 }

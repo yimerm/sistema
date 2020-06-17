@@ -10,9 +10,14 @@
 		      	</div>
 		      <div class="modal-body">
 				    <form @submit.prevent="guardarinventario" class="form-group" id="formProductos" autocomplete="off">
-						<div class="form-group">
-							<label for="codigo">Codigo Factura</label>
-							<input type="text" class="form-control" id="codigo" aria-describedby="nombreHelp" placeholder="Codigo Factura" v-model="codigo">
+				    	
+						<div class="form-group"> 
+							<div class="input-group input-group-lg">
+								<div class="input-group-prepend">
+									<div for="codigo" class="input-group-text">Precio Final</div>
+								</div>
+								<input type="text" class="form-control" id="codigo" aria-describedby="nombreHelp" placeholder="Codigo Factura" v-model="codigo">
+							</div>
 						</div>
 
 						<div class="form-group">
@@ -61,6 +66,7 @@ export default
 					console.log(res)
 					$('#modal_pro').modal('hide')
 					EventBus.$emit('inventario-agregar', res.data.entradafactura)
+					console.log(EventBus)
 				})
 				.catch(function(err){
 					console.log(err)

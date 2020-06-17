@@ -16,12 +16,10 @@ class factEntradaControler extends Controller
     {
         if ($request->ajax()){
 
-            $proveedors = entradafactura::all();
+            $proveedors = entradafactura::with('proveedor')->get();  
 
-            //$proveedor = entradafactura::all();
-
-            $codprove = entradafactura::codprove();
-            $data = ["codprove"=> $codprove,"proveedors"=> $proveedors];
+            $codprove = entradafactura::codprove(); 
+            $data = ["codprove"=> $codprove,"proveedors"=> $proveedors]; 
             return response()->json($data,200);
         }
 
@@ -49,7 +47,7 @@ class factEntradaControler extends Controller
      */
     public function store(Request $request)
     {
-
+ 
         if ($request->ajax()) 
         { 
             $entradafactura = new entradafactura();
