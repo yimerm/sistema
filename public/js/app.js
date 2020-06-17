@@ -2245,6 +2245,10 @@ __webpack_require__.r(__webpack_exports__);
           precio_final: this.precio_final,
           cantidades: this.cantidades,
           slug_pro: this.slug_pro
+        }).then(function (res) {
+          console.log(res);
+          $('#nuevoproducto').modal('hide');
+          _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.producto);
         })["catch"](function (err) {
           console.log(err);
         });

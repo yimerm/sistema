@@ -175,7 +175,13 @@ export default
 					cantidades: this.cantidades,
 					slug_pro: this.slug_pro,
 					
-					}).catch(function(err){
+					})
+					.then(function(res){
+						console.log(res)
+						$('#nuevoproducto').modal('hide')
+						EventBus.$emit('producto-agregar', res.data.producto)
+					})
+					.catch(function(err){
 						console.log(err)
 					});					
 
