@@ -2187,7 +2187,7 @@ __webpack_require__.r(__webpack_exports__);
       Porcentaje: '',
       precio_final: '0',
       cantidades: '',
-      imagenprod: '',
+      imagenprod: null,
       slug_pro: '',
       update: 0,
       titulo: "Nuevo Producto",
@@ -2203,10 +2203,11 @@ __webpack_require__.r(__webpack_exports__);
     _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('producto-edit', function (data) {
       _this.codigo = data.codigo;
       _this.nombre = data.nombre;
-      _this.categoria = data.categoria;
+      _this.categoria = data.categoria.id;
       _this.precio_ini = data.precio_ini;
       _this.Porcentaje = data.Porcentaje;
       _this.precio_final = data.precio_final;
+      _this.cantidades = data.cantidades;
       _this.imagenprod = data.imagenprod;
       _this.slug_pro = data.slug_pro;
       _this.update = 1;
@@ -2214,6 +2215,10 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    obtenerimagen: function obtenerimagen(e) {
+      var file = e.target.files[0];
+      this.imagenprod = file;
+    },
     guardarproducto: function guardarproducto() {
       var metodo = this;
 
@@ -2230,7 +2235,10 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           console.log(res);
           $('#nuevoproducto').modal('hide');
-          _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.producto);
+          $(document.body).removeClass('modal-open');
+          $('.modal-backdrop').remove();
+          _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.productos);
+          metodo.reset();
         })["catch"](function (err) {
           console.log(err);
         });
@@ -2248,11 +2256,30 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           console.log(res);
           $('#nuevoproducto').modal('hide');
-          _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.producto);
+          $(document.body).removeClass('modal-open');
+          $('.modal-backdrop').remove();
+          _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.productos);
+          metodo.reset();
         })["catch"](function (err) {
           console.log(err);
         });
       }
+    },
+    reset: function reset() {
+      this.imagenprod = "";
+      this.codigo = "";
+      this.categoria = "";
+      this.nombre = "";
+      this.precio_ini = "";
+      this.Porcentaje = "";
+      this.precio_final = "";
+      this.cantidades = "";
+      this.slug_pro = "";
+      this.titulo = "Nuevo Producto";
+      this.update = 0;
+      $('#crearProducto').modal('hide');
+      $(document.body).removeClass('modal-open');
+      $('.modal-backdrop').remove();
     }
   }
 });
@@ -2335,6 +2362,10 @@ __webpack_require__.r(__webpack_exports__);
 
     _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('producto-agregar', function (data) {
       _this.tablaprod.push(data);
+
+      axios.get('http://venta.test/productos').then(function (response) {
+        return _this.tablaprod = response.data.tablaprod;
+      });
     });
   },
   mounted: function mounted() {
@@ -38980,7 +39011,11 @@ var render = function() {
               "form",
               {
                 staticClass: "form-group",
-                attrs: { id: "formProductos", autocomplete: "off" },
+                attrs: {
+                  enctype: "multipart/from-data",
+                  id: "formProductos",
+                  autocomplete: "off"
+                },
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
@@ -39241,30 +39276,14 @@ var render = function() {
                     _vm._m(7),
                     _vm._v(" "),
                     _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.imagenprod,
-                          expression: "imagenprod"
-                        }
-                      ],
                       staticClass: "form-control",
                       attrs: {
-                        type: "text",
+                        type: "file",
                         id: "imagenprod",
                         "aria-describedby": "nombreHelp",
                         placeholder: "Codigo Factura"
                       },
-                      domProps: { value: _vm.imagenprod },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.imagenprod = $event.target.value
-                        }
-                      }
+                      on: { change: _vm.obtenerimagen }
                     })
                   ])
                 ]),
@@ -39421,95 +39440,98 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "table",
-      { staticClass: "table table-dark table-hover table-bordered table-sm" },
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          _vm._l(_vm.tablaprod, function(tablaprods) {
-            return _c("tr", [
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.imagenprod))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.codigo))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.nombre))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.categoria.nombre))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.precio_ini))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.Porcentaje))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.precio_final))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _vm._v(_vm._s(tablaprods.cantidades))
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary btn-sm",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "modal",
-                      "data-backdrop": "static",
-                      "data-target": "#nuevoproducto"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.editProductos(tablaprods)
-                      }
-                    }
+    _c("table", { staticClass: "table  table-hover table-bordered table-sm" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.tablaprod, function(tablaprods) {
+          return _c("tr", [
+            _c("td", { attrs: { align: "center" } }, [
+              _c("img", {
+                staticClass: "img-responsive",
+                attrs: {
+                  src: "imagenes/" + tablaprods.imagenprod,
+                  height: "50",
+                  width: "70"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.codigo))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.nombre))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.categoria.nombre))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.precio_ini))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.Porcentaje))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.precio_final))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _vm._v(_vm._s(tablaprods.cantidades))
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary btn-sm",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-backdrop": "static",
+                    "data-target": "#nuevoproducto"
                   },
-                  [_vm._v("\n\t\t\t\t\t\t  Editar\n\t\t\t\t\t\t")]
-                )
-              ]),
-              _vm._v(" "),
-              _c("td", { attrs: { align: "center" } }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-sm",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "modal",
-                      "data-backdrop": "static",
-                      "data-target": "#deleteProducto"
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteProductos(tablaprods)
-                      }
+                  on: {
+                    click: function($event) {
+                      return _vm.editProductos(tablaprods)
                     }
+                  }
+                },
+                [_vm._v("\n\t\t\t\t\t\t  Editar\n\t\t\t\t\t\t")]
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", { attrs: { align: "center" } }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-danger btn-sm",
+                  attrs: {
+                    type: "button",
+                    "data-toggle": "modal",
+                    "data-backdrop": "static",
+                    "data-target": "#deleteProducto"
                   },
-                  [_vm._v("\n\t\t\t\t\t\t  Eliminar\n\t\t\t\t\t\t")]
-                )
-              ])
+                  on: {
+                    click: function($event) {
+                      return _vm.deleteProductos(tablaprods)
+                    }
+                  }
+                },
+                [_vm._v("\n\t\t\t\t\t\t  Eliminar\n\t\t\t\t\t\t")]
+              )
             ])
-          }),
-          0
-        )
-      ]
-    )
+          ])
+        }),
+        0
+      )
+    ])
   ])
 }
 var staticRenderFns = [

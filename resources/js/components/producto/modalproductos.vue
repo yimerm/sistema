@@ -9,7 +9,7 @@
 			        </button>
 		      	</div>
 		      <div class="modal-body">
-				    <form @submit.prevent="guardarproducto" class="form-group" id="formProductos" autocomplete="off">
+				    <form enctype="multipart/from-data" @submit.prevent="guardarproducto" class="form-group" id="formProductos" autocomplete="off">
 
 						<div class="form-group"> 
 							<div class="input-group input-group-lg">
@@ -84,7 +84,7 @@
 								<div class="input-group-prepend">
 									<div for="imagenprod" class="input-group-text">Imagen</div>
 								</div>
-								<input type="text" class="form-control" id="imagenprod" aria-describedby="nombreHelp" placeholder="Codigo Factura" v-model="imagenprod">
+								<input type="file" class="form-control" id="imagenprod" aria-describedby="nombreHelp" placeholder="Codigo Factura"  @change='obtenerimagen' >
 							</div>
 						</div> 
 						
@@ -113,7 +113,7 @@ export default
 				Porcentaje:'',
 				precio_final:'0',
 				cantidades:'',
-				imagenprod:'',
+				imagenprod: null,
 				slug_pro:'',
 				update : 0,
 				titulo : "Nuevo Producto",
@@ -125,10 +125,11 @@ export default
 			EventBus.$on('producto-edit', data => {
 				this.codigo = data.codigo;
 				this.nombre = data.nombre;
-				this.categoria = data.categoria;
+				this.categoria = data.categoria.id;
 				this.precio_ini = data.precio_ini;
 				this.Porcentaje = data.Porcentaje;
 				this.precio_final = data.precio_final;
+				this.cantidades = data.cantidades;
 				this.imagenprod = data.imagenprod;
 				this.slug_pro = data.slug_pro;
 				this.update = 1;
@@ -136,6 +137,12 @@ export default
 			});
         },
 		methods: {
+
+			obtenerimagen(e){
+				let file = e.target.files[0];
+				this.imagenprod = file;
+			},
+
 			guardarproducto : function()
 
 			{
@@ -156,7 +163,10 @@ export default
 					.then(function(res){
 						console.log(res)
 						$('#nuevoproducto').modal('hide')
-						EventBus.$emit('producto-agregar', res.data.producto)
+						$(document.body).removeClass('modal-open');
+						$('.modal-backdrop').remove();
+						EventBus.$emit('producto-agregar', res.data.productos)
+						metodo.reset();
 					})
 					.catch(function(err){
 						console.log(err)
@@ -179,7 +189,10 @@ export default
 					.then(function(res){
 						console.log(res)
 						$('#nuevoproducto').modal('hide')
-						EventBus.$emit('producto-agregar', res.data.producto)
+						$(document.body).removeClass('modal-open');
+						$('.modal-backdrop').remove();
+						EventBus.$emit('producto-agregar', res.data.productos)
+						metodo.reset();
 					})
 					.catch(function(err){
 						console.log(err)
@@ -187,6 +200,22 @@ export default
 
 				}
 			},
+			    reset: function(){
+			     this.imagenprod = "" ;
+				 this.codigo = "" ;
+				 this.categoria = "" ;
+				 this.nombre = "" ;
+				 this.precio_ini = "" ;
+				 this.Porcentaje = "" ;
+				 this.precio_final = "" ;
+				 this.cantidades = "" ;
+				 this.slug_pro = "" ;
+	 			this.titulo = "Nuevo Producto";
+	 			this.update = 0;
+	 			$('#crearProducto').modal('hide');
+    			$(document.body).removeClass('modal-open');
+				$('.modal-backdrop').remove();
+        	},
  		
 		}
 	}

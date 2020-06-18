@@ -1,7 +1,7 @@
 <template>
 
 	<div> 
-		<table class="table table-dark table-hover table-bordered table-sm">
+		<table class="table  table-hover table-bordered table-sm">
 			<thead>
 				<tr align="center">
 					<th colspan="9">Listado de Productos</th>
@@ -27,7 +27,7 @@
 				<tbody>
 					<tr v-for="tablaprods in tablaprod">
 
-						<td align="center">{{ tablaprods.imagenprod}}</td> 
+						<td align="center"><img :src="'imagenes/'+ tablaprods.imagenprod" class="img-responsive" height="50" width="70"></td> 
 						<td align="center">{{ tablaprods.codigo}}</td>      
 						<td align="center">{{ tablaprods.nombre }}</td>
 						<td align="center">{{ tablaprods.categoria.nombre}}</td>
@@ -63,12 +63,14 @@ import EventBus from '../../event-bus';
 		created(){
 			EventBus.$on('producto-agregar', data => {
 				this.tablaprod.push(data)
+				axios.get('http://venta.test/productos').then(response =>(this.tablaprod = response.data.tablaprod))
+
 			})
 		},
 		mounted(){
 			axios.get('http://venta.test/productos').then(response =>(this.tablaprod = response.data.tablaprod))
 		},
-		
+
 		methods: {
 
 			editProductos(data){

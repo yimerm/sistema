@@ -100,9 +100,20 @@ class productosControler extends Controller
     {
         if ($request->ajax()) 
         {
-            $comparar = Str::of($request->input('nombre'))->slug_pro('-');
+
+
+            $comparar = Str::of($request->input('nombre'))->slug('-');
             if ($comparar == $producto->slug_pro || !productos::where('slug_pro', $comparar)->exists()) 
             {
+
+            if ($request->hasfile('imagenprod')) {
+
+            $imagen = $request->file('imagenprod');
+            $nombreimg = time().$imagen->getClientOriginalName();
+            $imagen->move(public_path().'/imagenes/',$nombreimg);
+
+            }
+
                 $producto->slug_pro = $comparar;
 
                 $producto->codigo = $request->input('codigo');
@@ -112,7 +123,7 @@ class productosControler extends Controller
                 $producto->Porcentaje = $request->input('Porcentaje');
                 $producto->precio_final = $request->input('precio_final');
                 $producto->cantidades = $request->input('cantidades');
-                $producto->imagenprod = $request->input('imagenprod');
+                $producto->imagenprod = $nombreimg;
 
                 $producto->save();
                 $productos = productos::with('categoria')->where('productos.slug_pro', $producto->slug_pro)->first();
