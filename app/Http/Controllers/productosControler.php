@@ -45,8 +45,17 @@ class productosControler extends Controller
      */
     public function store(Request $request)
     {
-                if ($request->ajax()) 
-        { 
+
+            if ($request->hasfile('imagenprod')) { 
+
+            $imagen = $request->file('imagenprod');
+            $nombreimg = $imagen->getClientOriginalName();
+            $imagen->move(public_path().'/imagenes/',$nombreimg);
+
+            }
+
+
+
             $producto = new productos();
             $producto->codigo = $request->input('codigo');
             $producto->categoria = $request->input('categoria');
@@ -57,14 +66,14 @@ class productosControler extends Controller
             $producto->cantidades = $request->input('cantidades');
             $producto->total_cantidades = $request->input('cantidades');
             $producto->salidas_cantidades = '0'; 
-            $producto->imagenprod = $request->input('imagenprod');
+            $producto->imagenprod = $nombreimg;
             $producto->slug_pro = Str::of($request->input('codigo'));
             $producto->save(); 
             return response()->json([
                 "message"=>"Producto creado",
                 "producto"=>$producto
             ],200);
-        }
+        
 
     }
 
@@ -101,18 +110,20 @@ class productosControler extends Controller
         if ($request->ajax()) 
         {
 
+        $producto->fill($request->except('imagenprod'));
+        if ($request->hasfile('imagenprod')) {
+            $imagen = $request->file('imagenprod');
+            $nombreimg = $imagen->getClientOriginalName();
+            $producto->imagenprod = $nombreimg;
+            $imagen->move(public_path().'/imagenes/',$nombreimg);
+        }
+
 
             $comparar = Str::of($request->input('nombre'))->slug('-');
-            if ($comparar == $producto->slug_pro || !productos::where('slug_pro', $comparar)->exists()) 
+            if ($comparar == $producto->slug_pro || !productos::where('slug_pro', $comparar)->exists() ) 
             {
 
-            if ($request->hasfile('imagenprod')) {
 
-            $imagen = $request->file('imagenprod');
-            $nombreimg = time().$imagen->getClientOriginalName();
-            $imagen->move(public_path().'/imagenes/',$nombreimg);
-
-            }
 
                 $producto->slug_pro = $comparar;
 

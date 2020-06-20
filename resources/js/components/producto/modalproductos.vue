@@ -84,7 +84,7 @@
 								<div class="input-group-prepend">
 									<div for="imagenprod" class="input-group-text">Imagen</div>
 								</div>
-								<input type="file" class="form-control" id="imagenprod" aria-describedby="nombreHelp" placeholder="Codigo Factura"  @change='obtenerimagen' >
+							<input type="file" class="form-control" name="imagenprod" id="imagenprod" aria-describedby="nombreHelp" placeholder="Codigo Factura" @change="obtenerimagen">
 							</div>
 						</div> 
 						
@@ -106,6 +106,9 @@ export default
 	{
 		data(){
 			return{
+				producto:{
+					imagenprod:'',
+				},
 				codigo:'',
 				categoria: null,
 				nombre:'',
@@ -113,7 +116,7 @@ export default
 				Porcentaje:'',
 				precio_final:'0',
 				cantidades:'',
-				imagenprod: null,
+				
 				slug_pro:'',
 				update : 0,
 				titulo : "Nuevo Producto",
@@ -130,43 +133,53 @@ export default
 				this.Porcentaje = data.Porcentaje;
 				this.precio_final = data.precio_final;
 				this.cantidades = data.cantidades;
-				this.imagenprod = data.imagenprod;
 				this.slug_pro = data.slug_pro;
 				this.update = 1;
 				this.titulo = "Editar Producto";
+				var data = new  FormData();
+	                //Añadimos la imagen seleccionada
+	                data.append('imagenprod', this.producto.imagenprod);
+
+
 			});
         },
 		methods: {
 
-			obtenerimagen(e){
-				let file = e.target.files[0];
-				this.imagenprod = file;
+
+			obtenerimagen(e){ 
+				this.producto.imagenprod = event.target.files[0];
+
 			},
 
 			guardarproducto : function()
 
-			{
+			{ 
 				let metodo = this;
-        		if (this.update==0)
-        		{
-					axios.post('http://venta.test/productos',{
-					imagenprod: this.imagenprod,
-					codigo: this.codigo,
-					categoria: this.categoria,
-					nombre: this.nombre,
-					precio_ini: this.precio_ini,
-					Porcentaje: this.Porcentaje,
-					precio_final: this.precio_final,
-					cantidades: this.cantidades,
-					
-					})
-					.then(function(res){
+				if (this.update==0) 
+				{
+					var data = new  FormData();
+	                //Añadimos la imagen seleccionada
+	                data.append('imagenprod', this.producto.imagenprod);
+	                data.append('codigo', this.codigo);
+	                data.append('categoria', this.categoria);
+	                data.append('nombre', this.nombre);
+	                data.append('precio_ini', this.precio_ini);
+	                data.append('Porcentaje', this.Porcentaje);
+	                data.append('precio_final', this.precio_final);
+	                data.append('cantidades', this.cantidades);
+	                //Añadimos el método PUT dentro del formData
+	                // Como lo hacíamos desde un formulario simple _(no ajax)_
+	                data.append('_method', 'POST');
+	                //Enviamos la petición
+	                axios.post('http://venta.test/productos',data)
+	                .then(function(res){
 						console.log(res)
 						$('#nuevoproducto').modal('hide')
 						$(document.body).removeClass('modal-open');
-						$('.modal-backdrop').remove();
+					$('.modal-backdrop').remove();
 						EventBus.$emit('producto-agregar', res.data.productos)
 						metodo.reset();
+						console.log(EventBus)
 					})
 					.catch(function(err){
 						console.log(err)
@@ -174,29 +187,33 @@ export default
 				}
 				else
 				{
-					axios.put('http://venta.test/productos/'+this.slug_pro,{
-					imagenprod: this.imagenprod,
-					codigo: this.codigo,
-					categoria: this.categoria,
-					nombre: this.nombre,
-					precio_ini: this.precio_ini,
-					Porcentaje: this.Porcentaje,
-					precio_final: this.precio_final,
-					cantidades: this.cantidades,
-					slug_pro: this.slug_pro,
-					
-					})
+					var data = new  FormData();
+	                //Añadimos la imagen seleccionada
+	                data.append('imagenprod', this.producto.imagenprod);
+	                data.append('codigo', this.codigo);
+	                data.append('categoria', this.categoria);
+	                data.append('nombre', this.nombre);
+	                data.append('precio_ini', this.precio_ini);
+	                data.append('Porcentaje', this.Porcentaje);
+	                data.append('precio_final', this.precio_final);
+	                data.append('cantidades', this.cantidades);
+	                data.append('slug_pro', this.slug_pro);
+	                //Añadimos el método PUT dentro del formData
+	                // Como lo hacíamos desde un formulario simple _(no ajax)_
+	                data.append('_method', 'POST');
+	                //Enviamos la petición
+	                axios.post('http://venta.test/productos',+this.slug_pro,)
 					.then(function(res){
-						console.log(res)
-						$('#nuevoproducto').modal('hide')
-						$(document.body).removeClass('modal-open');
-						$('.modal-backdrop').remove();
-						EventBus.$emit('producto-agregar', res.data.productos)
-						metodo.reset();
+					console.log(res)
+					$('#nuevoproducto').modal('hide')
+					$(document.body).removeClass('modal-open');
+					$('.modal-backdrop').remove();
+					EventBus.$emit('producto-agregar', res.data.productos)
+					metodo.reset();
 					})
 					.catch(function(err){
-						console.log(err)
-					});					
+					console.log(err)
+					});	
 
 				}
 			},
@@ -219,7 +236,11 @@ export default
  		
 		}
 	}
+	
+
 </script>
 <style>
 	
 </style>
+
+

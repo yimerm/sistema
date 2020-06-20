@@ -2180,6 +2180,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      producto: {
+        imagenprod: ''
+      },
       codigo: '',
       categoria: null,
       nombre: '',
@@ -2187,7 +2190,6 @@ __webpack_require__.r(__webpack_exports__);
       Porcentaje: '',
       precio_final: '0',
       cantidades: '',
-      imagenprod: null,
       slug_pro: '',
       update: 0,
       titulo: "Nuevo Producto",
@@ -2208,52 +2210,64 @@ __webpack_require__.r(__webpack_exports__);
       _this.Porcentaje = data.Porcentaje;
       _this.precio_final = data.precio_final;
       _this.cantidades = data.cantidades;
-      _this.imagenprod = data.imagenprod;
       _this.slug_pro = data.slug_pro;
       _this.update = 1;
       _this.titulo = "Editar Producto";
+      var data = new FormData(); //Añadimos la imagen seleccionada
+
+      data.append('imagenprod', _this.producto.imagenprod);
     });
   },
   methods: {
     obtenerimagen: function obtenerimagen(e) {
-      var file = e.target.files[0];
-      this.imagenprod = file;
+      this.producto.imagenprod = event.target.files[0];
     },
     guardarproducto: function guardarproducto() {
       var metodo = this;
 
       if (this.update == 0) {
-        axios.post('http://venta.test/productos', {
-          imagenprod: this.imagenprod,
-          codigo: this.codigo,
-          categoria: this.categoria,
-          nombre: this.nombre,
-          precio_ini: this.precio_ini,
-          Porcentaje: this.Porcentaje,
-          precio_final: this.precio_final,
-          cantidades: this.cantidades
-        }).then(function (res) {
+        var data = new FormData(); //Añadimos la imagen seleccionada
+
+        data.append('imagenprod', this.producto.imagenprod);
+        data.append('codigo', this.codigo);
+        data.append('categoria', this.categoria);
+        data.append('nombre', this.nombre);
+        data.append('precio_ini', this.precio_ini);
+        data.append('Porcentaje', this.Porcentaje);
+        data.append('precio_final', this.precio_final);
+        data.append('cantidades', this.cantidades); //Añadimos el método PUT dentro del formData
+        // Como lo hacíamos desde un formulario simple _(no ajax)_
+
+        data.append('_method', 'POST'); //Enviamos la petición
+
+        axios.post('http://venta.test/productos', data).then(function (res) {
           console.log(res);
           $('#nuevoproducto').modal('hide');
           $(document.body).removeClass('modal-open');
           $('.modal-backdrop').remove();
           _event_bus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('producto-agregar', res.data.productos);
           metodo.reset();
+          console.log(_event_bus__WEBPACK_IMPORTED_MODULE_0__["default"]);
         })["catch"](function (err) {
           console.log(err);
         });
       } else {
-        axios.put('http://venta.test/productos/' + this.slug_pro, {
-          imagenprod: this.imagenprod,
-          codigo: this.codigo,
-          categoria: this.categoria,
-          nombre: this.nombre,
-          precio_ini: this.precio_ini,
-          Porcentaje: this.Porcentaje,
-          precio_final: this.precio_final,
-          cantidades: this.cantidades,
-          slug_pro: this.slug_pro
-        }).then(function (res) {
+        var data = new FormData(); //Añadimos la imagen seleccionada
+
+        data.append('imagenprod', this.producto.imagenprod);
+        data.append('codigo', this.codigo);
+        data.append('categoria', this.categoria);
+        data.append('nombre', this.nombre);
+        data.append('precio_ini', this.precio_ini);
+        data.append('Porcentaje', this.Porcentaje);
+        data.append('precio_final', this.precio_final);
+        data.append('cantidades', this.cantidades);
+        data.append('slug_pro', this.slug_pro); //Añadimos el método PUT dentro del formData
+        // Como lo hacíamos desde un formulario simple _(no ajax)_
+
+        data.append('_method', 'POST'); //Enviamos la petición
+
+        axios.post('http://venta.test/productos', +this.slug_pro).then(function (res) {
           console.log(res);
           $('#nuevoproducto').modal('hide');
           $(document.body).removeClass('modal-open');
@@ -39279,6 +39293,7 @@ var render = function() {
                       staticClass: "form-control",
                       attrs: {
                         type: "file",
+                        name: "imagenprod",
                         id: "imagenprod",
                         "aria-describedby": "nombreHelp",
                         placeholder: "Codigo Factura"
